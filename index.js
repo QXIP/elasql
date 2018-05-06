@@ -48,29 +48,63 @@ var convert = function(q){
 	dsl.aggregations = aggs;
   }
 
+  function leftRight(operator,data){
+	switch( operator ){
+	  case "=":
+		bool.must.push( { match: { [data.left.column]: data.right.value }} );
+		break;
+	  case ">":
+		range[data.left.column] = {};
+		range[data.left.column].gte = data.right.value;
+		break;
+	  case "<":
+		range[data.left.column] = {};
+		range[data.left.column].lte = data.right.value;
+		break;
+	  case "BETWEEN":
+		range[data.left.column] = {};
+		range[data.left.column].gte = data.right.value[0];
+		range[data.left.column].lte = data.right.value[1];
+		break;
+	}
+  }
+
+
   if (query.where.operator){
 	var bool = {
           "must": [],
           "must_not": [],
-          "should": [],
+	  "filter": [],
         }
 	var range = {};
-	switch( query.where.operator ){
-	  case ">":
+
+	if(query.where.operator == "AND" && query.where.left.right){
+		leftRight(query.where.left.operator,query.where.left);
+		leftRight(query.where.right.operator,query.where.right);
+	} else {
+
+	  switch( query.where.operator ){
+	    case "=":
+		bool.must.push( { match: { [query.where.left.column]: query.where.right.value }} );
+		break;
+	    case ">":
 		range[query.where.left.column] = {};
 		range[query.where.left.column].gte = query.where.right.value;
 		break;
-	  case "<":
+	    case "<":
 		range[query.where.left.column] = {};
 		range[query.where.left.column].lte = query.where.right.value;
 		break;
-	  case "BETWEEN":
+	    case "BETWEEN":
 		range[query.where.left.column] = {};
 		range[query.where.left.column].gte = query.where.right.value[0];
 		range[query.where.left.column].lte = query.where.right.value[1];
 		break;
+	 }
 	}
-	dsl.query.range = range;
+
+	bool.filter.push({ range: range });
+	dsl.query.bool = bool;
   } else {
 
     dsl.query = { "match_all": {} };
