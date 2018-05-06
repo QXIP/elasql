@@ -1,0 +1,31 @@
+{
+  "name": "sqlastic",
+  "version": "1.0.1",
+  "description": "SQL to Elastic query converter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lorenzo Mangani <lorenzo.mangani@gmail.com> (http://qxip.net/)",
+  "license": "MIT",
+  "dependencies": {
+    "node-sqlparser": "^1.0.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lmangani/sqlastic.git"
+  },
+  "keywords": [
+    "elastic",
+    "elasticsearch",
+    "sql",
+    "query",
+    "translate",
+    "convert"
+  ],
+  "bugs": {
+    "url": "https://github.com/lmangani/sqlastic/issues"
+  },
+  "homepage": "https://github.com/lmangani/sqlastic#readme"
+}
