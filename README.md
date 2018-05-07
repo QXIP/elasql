@@ -9,7 +9,7 @@ npm install sqlastic
 ## Usage
 ```
 const convert = require('sqlastic').convert
-convert('SELECT id,name from shop where shop_id between 5 and 10 AND type = "cat"')
+convert('SELECT id,name FROM shop WHERE shop_id BETWEEN 5 AND 10 AND type = "cat"')
 ```
 ##### Output
 ```
