@@ -1,5 +1,6 @@
-# sqlastic
-Generic SQL to Elasticsearch query translator
+# sql{el}astic <img src="https://user-images.githubusercontent.com/1423657/38137158-590eefbc-3423-11e8-96dd-487022b5618c.gif" width=100 />
+
+Generic SQL to Elasticsearch query translator. Designed for [SENTINL](https://github.com/sirensolutions/sentinl)
 
 ## Installation
 ```
@@ -58,3 +59,6 @@ convert('SELECT id,name from shop where shop_id between 5 and 10 AND type = "cat
 }
 
 ```
+
+### License
+(C) QXIP BV 2018, released under the MIT License
