@@ -2,6 +2,9 @@
 
 Generic SQL to Elasticsearch DSL query translator. Designed for [SENTINL](https://github.com/sirensolutions/sentinl)
 
+### Status
+* Experimental - Join us hacking this!
+
 ## Installation
 ```
 npm install elasql
