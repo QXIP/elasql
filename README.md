@@ -1,14 +1,15 @@
-# sql{el}astic <img src="https://user-images.githubusercontent.com/1423657/38137158-590eefbc-3423-11e8-96dd-487022b5618c.gif" width=100 />
+# {ela}sql <img src="https://user-images.githubusercontent.com/1423657/38137158-590eefbc-3423-11e8-96dd-487022b5618c.gif" width=100 />
 
-Generic SQL to Elasticsearch query translator. Designed for [SENTINL](https://github.com/sirensolutions/sentinl)
+Generic SQL to Elasticsearch DSL query translator. Designed for [SENTINL](https://github.com/sirensolutions/sentinl)
 
 ## Installation
 ```
-npm install sqlastic
+npm install elasql
 ```
+
 ## Usage
 ```
-const convert = require('sqlastic').convert
+const convert = require('elasql').convert
 convert('SELECT id,name FROM shop WHERE shop_id BETWEEN 5 AND 10 AND type = "cat"')
 ```
 ##### Output

@@ -1,7 +1,7 @@
 {
-  "name": "sqlastic",
+  "name": "elasql",
   "version": "1.0.2",
-  "description": "SQL to Elastic query converter",
+  "description": "SQL to Elastic DSL query converter",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,18 +14,19 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lmangani/sqlastic.git"
+    "url": "git+https://github.com/lmangani/elasql.git"
   },
   "keywords": [
     "elastic",
     "elasticsearch",
     "sql",
+    "dsl",
     "query",
     "translate",
     "convert"
   ],
   "bugs": {
-    "url": "https://github.com/lmangani/sqlastic/issues"
+    "url": "https://github.com/lmangani/elasql/issues"
   },
-  "homepage": "https://github.com/lmangani/sqlastic#readme"
+  "homepage": "https://github.com/lmangani/elasql#readme"
 }
