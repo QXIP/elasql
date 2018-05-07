@@ -36,22 +36,21 @@ var convert = function(q){
 	  }
 	})
 
-	/*
-  	query.columns.forEach(function(col){
-  	  if (col.expr.column) {
-  	    aggs[col.expr.column] = { "terms" : { "field" : col.expr.column } };
-	    parent = col.expr.column;
-  	  }
-  	})
-	*/
-
 	dsl.aggregations = aggs;
   }
 
   function leftRight(operator,data){
+	if(operator == "AND" && data.left.right){
+		leftRight(data.left.operator,data.left);
+		leftRight(data.right.operator,data.right);
+		return;
+	}
 	switch( operator ){
 	  case "=":
 		bool.must.push( { match: { [data.left.column]: data.right.value }} );
+		break;
+	  case "NOT":
+		bool.must_not.push( { match: { [data.left.column]: data.right.value }} );
 		break;
 	  case ">":
 		range[data.left.column] = {};
@@ -69,7 +68,6 @@ var convert = function(q){
 	}
   }
 
-
   if (query.where.operator){
 	var bool = {
           "must": [],
@@ -78,37 +76,16 @@ var convert = function(q){
         }
 	var range = {};
 
-	if(query.where.operator == "AND" && query.where.left.right){
-		leftRight(query.where.left.operator,query.where.left);
-		leftRight(query.where.right.operator,query.where.right);
-	} else {
-
-	  switch( query.where.operator ){
-	    case "=":
-		bool.must.push( { match: { [query.where.left.column]: query.where.right.value }} );
-		break;
-	    case ">":
-		range[query.where.left.column] = {};
-		range[query.where.left.column].gte = query.where.right.value;
-		break;
-	    case "<":
-		range[query.where.left.column] = {};
-		range[query.where.left.column].lte = query.where.right.value;
-		break;
-	    case "BETWEEN":
-		range[query.where.left.column] = {};
-		range[query.where.left.column].gte = query.where.right.value[0];
-		range[query.where.left.column].lte = query.where.right.value[1];
-		break;
-	 }
-	}
+	leftRight(query.where.operator,query.where);
 
 	bool.filter.push({ range: range });
 	dsl.query.bool = bool;
+
   } else {
 
-    dsl.query = { "match_all": {} };
+    	dsl.query = { "match_all": {} };
   }
+
   return dsl;
 
 }
