@@ -29,7 +29,11 @@ var convert = function(q){
 	query.columns.forEach(function(key,i){
 	  parent.push(key.expr.column);
 	  var jid = parent.join('.')
-	  index(aggs,jid,{ "terms" : { "field" : key.expr.column } });
+          if (query.groupby && query.groupby[i].column) {
+                index(aggs, jid, { 'terms': { 'field': query.groupby[i].column } })
+          } else {
+                index(aggs, jid, { 'terms': { 'field': key.expr.column } })
+          }
 	  if(i<query.columns.length-1){
 	    index(aggs,jid+".aggregations",{});
 	    parent.push('aggregations');
@@ -68,7 +72,7 @@ var convert = function(q){
 	}
   }
 
-  if (query.where.operator){
+  if (query.where && query.where.operator){
 	var bool = {
           "must": [],
           "must_not": [],
