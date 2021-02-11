@@ -49,40 +49,94 @@ var convert = function(q){
 		leftRight(data.right.operator,data.right);
 		return;
 	}
+	if(operator == "OR" && data.left.right){
+		orLeftRight(data.left.operator,data.left);
+		orLeftRight(data.right.operator,data.right);
+		return;
+	}
+	if(operator == "NOT" && data.expr && data.expr.left && data.expr.right){
+		bool.must_not.push( { match: { [data.expr.left.column]: data.expr.right.value }} );
+		return;
+	}
 	switch( operator ){
-	  case "=":
-		bool.must.push( { match: { [data.left.column]: data.right.value }} );
-		break;
-	  case "NOT":
-		bool.must_not.push( { match: { [data.left.column]: data.right.value }} );
-		break;
-	  case ">":
-		range[data.left.column] = {};
-		range[data.left.column].gte = data.right.value;
-		break;
-	  case "<":
-		range[data.left.column] = {};
-		range[data.left.column].lte = data.right.value;
-		break;
-	  case "BETWEEN":
-		range[data.left.column] = {};
-		range[data.left.column].gte = data.right.value[0];
-		range[data.left.column].lte = data.right.value[1];
-		break;
+		case "=":
+			bool.must.push( { match: { [data.left.column]: data.right.value }} );
+			break;
+		case "<>":
+			bool.must_not.push( { match: { [data.left.column]: data.right.value }} );
+			break;
+		case ">":
+			range[data.left.column] = {};
+			range[data.left.column].gte = data.right.value;
+			break;
+		case "<":
+			range[data.left.column] = {};
+			range[data.left.column].lte = data.right.value;
+			break;
+		case "BETWEEN":
+			range[data.left.column] = {};
+			range[data.left.column].gte = data.right.value[0].value;
+			range[data.left.column].lte = data.right.value[1].value;
+			break;
+	}
+  }
+
+  function orLeftRight(operator,data){
+	if(operator == "NOT" && data.expr && data.expr.left && data.expr.right){
+		bool.must_not.push( { match: { [data.expr.left.column]: data.expr.right.value }} );
+		return;
+	}
+	switch( operator ){
+		case "=":
+			bool.should[0].bool.must.push( { match: { [data.left.column]: data.right.value }} );
+			break;
+		case "<>":
+			bool.should[0].bool.must_not.push( { match: { [data.left.column]: data.right.value }} );
+			break;
+		case ">":
+			range[data.left.column] = {};
+			range[data.left.column].gte = data.right.value;
+			break;
+		case "<":
+			range[data.left.column] = {};
+			range[data.left.column].lte = data.right.value;
+			break;
+		case "BETWEEN":
+			range[data.left.column] = {};
+			range[data.left.column].gte = data.right.value[0].value;
+			range[data.left.column].lte = data.right.value[1].value;
+			break;
 	}
   }
 
   if (query.where && query.where.operator){
 	var bool = {
-          "must": [],
-          "must_not": [],
-	  "filter": [],
-        }
+		"must": [],
+		"must_not": [],
+		"filter": [],
+		"should": [{
+			"bool":{
+				"must": [],
+				"must_not": []
+			}
+		}]
+	}
 	var range = {};
 
 	leftRight(query.where.operator,query.where);
 
-	bool.filter.push({ range: range });
+	if(Object.keys(range).length !== -1){
+		const rangeArr = Object.keys(range).map(val => {
+			const rangeObj = {
+				range: {
+					[val]: range[val]
+				}
+			}
+			return rangeObj;
+		})
+		bool.filter = rangeArr;
+	}
+	
 	dsl.query.bool = bool;
 
   } else {
