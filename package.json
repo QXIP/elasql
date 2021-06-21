@@ -1,6 +1,6 @@
 {
   "name": "elasql",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "SQL to Elastic DSL query converter",
   "main": "index.js",
   "scripts": {
